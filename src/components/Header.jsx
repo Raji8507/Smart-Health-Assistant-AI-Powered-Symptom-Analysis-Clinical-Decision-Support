@@ -12,7 +12,6 @@ export default function Header() {
         <h1>Smart Health Assistant</h1>
         <p>AI-powered symptom analysis &amp; clinical decision support</p>
       </div>
-      <div className="badge">✦ Powered by Claude AI</div>
     </header>
   );
 }

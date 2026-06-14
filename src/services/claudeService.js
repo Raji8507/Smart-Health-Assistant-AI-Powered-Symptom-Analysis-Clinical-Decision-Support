@@ -1,5 +1,10 @@
-const CLAUDE_API_URL = "/api/anthropic/v1/messages";
-const MODEL = "claude-sonnet-4-20250514";
+const CLAUDE_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const MODEL = "llama-3.3-70b-versatile";
+
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+});
 
 export async function analyzeSymptoms(symptoms, age, duration) {
   const prompt = `You are a clinical decision support AI. Analyze these symptoms and return ONLY a JSON object (no markdown, no preamble).
@@ -28,11 +33,7 @@ Return this exact JSON structure:
 
   const response = await fetch(CLAUDE_API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
+    headers: getHeaders(),
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1000,
@@ -40,10 +41,13 @@ Return this exact JSON structure:
     }),
   });
 
-  if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+  if (!response.ok) {
+    const errorBody = await response.json();
+    throw new Error(`API error ${response.status}: ${JSON.stringify(errorBody)}`);
+  }
 
   const data = await response.json();
-  const raw = data.content.map((i) => i.text || "").join("");
+  const raw = data.choices[0].message.content;
   const clean = raw.replace(/```json|```/g, "").trim();
   return JSON.parse(clean);
 }
@@ -51,11 +55,7 @@ Return this exact JSON structure:
 export async function askFollowUp(symptoms, question) {
   const response = await fetch(CLAUDE_API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
+    headers: getHeaders(),
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1000,
@@ -68,8 +68,11 @@ export async function askFollowUp(symptoms, question) {
     }),
   });
 
-  if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+  if (!response.ok) {
+    const errorBody = await response.json();
+    throw new Error(`API error ${response.status}: ${JSON.stringify(errorBody)}`);
+  }
 
   const data = await response.json();
-  return data.content.map((i) => i.text || "").join("");
+  return data.choices[0].message.content;
 }
