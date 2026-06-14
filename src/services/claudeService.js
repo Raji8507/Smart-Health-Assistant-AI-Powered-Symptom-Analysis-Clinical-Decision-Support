@@ -1,4 +1,4 @@
-const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
+const CLAUDE_API_URL = "/api/anthropic/v1/messages";
 const MODEL = "claude-sonnet-4-20250514";
 
 export async function analyzeSymptoms(symptoms, age, duration) {
@@ -28,7 +28,11 @@ Return this exact JSON structure:
 
   const response = await fetch(CLAUDE_API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1000,
@@ -36,7 +40,7 @@ Return this exact JSON structure:
     }),
   });
 
-  if (!response.ok) throw new Error("API request failed");
+  if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
   const data = await response.json();
   const raw = data.content.map((i) => i.text || "").join("");
@@ -47,7 +51,11 @@ Return this exact JSON structure:
 export async function askFollowUp(symptoms, question) {
   const response = await fetch(CLAUDE_API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1000,
@@ -60,7 +68,7 @@ export async function askFollowUp(symptoms, question) {
     }),
   });
 
-  if (!response.ok) throw new Error("API request failed");
+  if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
   const data = await response.json();
   return data.content.map((i) => i.text || "").join("");
