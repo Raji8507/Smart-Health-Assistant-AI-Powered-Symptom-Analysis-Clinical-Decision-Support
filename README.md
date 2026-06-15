@@ -1,6 +1,6 @@
 # Smart Health Assistant 🏥
 
-An AI-powered symptom analysis and clinical decision support web application built with React and the Claude AI API.
+An AI-powered symptom analysis and clinical decision support web application built with React and the Groq AI API.
 
 ## Overview
 
@@ -21,46 +21,13 @@ Smart Health Assistant addresses the problem of delayed and inaccessible prelimi
 ## Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
+|-------|------------|
 | Frontend | React 18 + Vite |
 | Styling | Plain CSS (no UI library) |
-| AI Engine | Claude API (claude-sonnet-4-20250514) |
+| AI Engine | Groq API (llama-3.3-70b-versatile) |
 | API Communication | Fetch API |
 
 ## Project Structure
-
-```
-smart-health-assistant/
-├── src/
-│   ├── components/
-│   │   ├── Header.jsx          # App header with branding
-│   │   ├── SymptomForm.jsx     # Input form with age/duration selectors
-│   │   ├── ResultCard.jsx      # Clinical analysis output card
-│   │   ├── FollowUpChat.jsx    # Follow-up Q&A component
-│   │   └── SessionStats.jsx    # Session metrics display
-│   ├── services/
-│   │   └── claudeService.js    # Claude API integration layer
-│   ├── App.jsx                 # Root component & state management
-│   ├── main.jsx                # Entry point
-│   └── index.css               # Global styles
-├── .env.example
-└── README.md
-```
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+
-- An Anthropic API key (get one at https://console.anthropic.com/)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/smart-health-assistant.git
-cd smart-health-assistant
-
-# Install dependencies
 npm install
 
 # Set up environment variables
@@ -107,6 +74,3 @@ This project focuses on:
 
 This tool is for informational purposes only and does not constitute medical advice. Always consult a qualified healthcare professional for diagnosis and treatment.
 
----
-
-Built by Rajeshwari — Hexaware Technologies Mavericks Program
